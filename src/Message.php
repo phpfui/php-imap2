@@ -335,7 +335,7 @@ class Message
         $client = $imap->getClient();
         #$client->setDebug(true);
 
-        $isUid = boolval($flags & FT_UID);
+        $isUid = (bool)($flags & FT_UID);
         $messages = $client->fetch($imap->getMailboxName(), $sequence, $isUid, [
             'BODY.PEEK[HEADER.FIELDS (SUBJECT FROM TO CC REPLYTO MESSAGEID DATE SIZE REFERENCES)]',
             'UID',
@@ -346,14 +346,17 @@ class Message
             'RFC822.HEADER'
         ]);
 
+
+        if (false === $messages) {
+            return [];
+        }
+
         if ($sequence != '*' && count($messages) < Functions::expectedNumberOfMessages($sequence)) {
             return [];
         }
 
         $overview = [];
         foreach ($messages as $message) {
-            #var_dump($message);
-            #die();
             $messageEntry = (object) [
                 'subject' => $message->envelope[1],
                 'from' => Functions::writeAddressFromEnvelope($message->envelope[2]),
@@ -394,6 +397,24 @@ class Message
         }
 
         return $overview;
+    }
+
+    public static function fetchUids($imap, string $sequence, int $flags = 0)
+    {
+        if (!is_a($imap, Connection::class)) {
+            return Errors::invalidImapConnection(debug_backtrace(), 1, false);
+        }
+
+        $client = $imap->getClient();
+
+        $isUid = boolval($flags & FT_UID);
+        $messages = $client->fetch($imap->getMailboxName(), $sequence, $isUid, ['UID']);
+
+        if ($sequence != '*' && count($messages) < Functions::expectedNumberOfMessages($sequence)) {
+            return false;
+        }
+
+        return $messages;
     }
 
     public static function delete($imap, $messageNums, $flags = 0)
