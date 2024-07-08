@@ -1042,7 +1042,7 @@ class ImapClient
         }
 
         if ($this->prefs['timeout'] <= 0) {
-            $this->prefs['timeout'] = max(0, intval(ini_get('default_socket_timeout')));
+            $this->prefs['timeout'] = max(60, intval(ini_get('default_socket_timeout')));
         }
 
         if ($this->debug) {
