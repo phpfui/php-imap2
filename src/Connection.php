@@ -143,6 +143,10 @@ class Connection
 
         if (empty($this->currentMailbox)) {
             $mailboxes = $this->client->listMailboxes('', '*');
+            if (false === $mailboxes) {
+                return false;
+            }
+
             if (in_array('INBOX', $mailboxes)) {
                 $this->currentMailbox = 'INBOX';
                 $this->mailbox .= 'INBOX';
