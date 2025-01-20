@@ -1,54 +1,30 @@
 {
-  "name": "javanile/php-imap2",
+  "name": "phpfui/php-imap",
   "type": "library",
-  "description": "PHP IMAP with OAUTH2",
+  "description": "PHP IMAP with OAUTH2 for drop in replacement in PHP 8.4",
   "keywords": [
     "imap",
     "oauth",
-    "oauth2",
-    "google",
-    "microsoft",
-    "gmail",
-    "outlook",
-    "exchange"
+    "oauth2"
   ],
-  "homepage": "https://github.com/javanile/php-imap2",
+  "homepage": "https://github.com/phpfui/php-imap2",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
-      "name": "Francesco Bianco",
-      "homepage": "https://github.com/francescobianco"
+      "name": "Bruce Wells",
+      "homepage": "https://github.com/phpfui"
     }
   ],
   "require": {
-    "php": ">=7.0",
-    "zbateson/mail-mime-parser": "^2.2"
+    "php": ">=8.2",
+    "javanile/php-imap2": "^0.1.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5"
-  },
-  "suggest": {
-    "ext-mbstring": "For best support/performance",
-    "ext-iconv": "For best support/performance"
+		"roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {
       "Javanile\\Imap2\\": "src"
     },
-    "files": [
-      "bootstrap.php"
-    ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Javanile\\Imap2\\Tests\\": "tests"
-    }
-  },
-  "minimum-stability": "dev",
-  "extra": {
-    "thanks": {
-      "name": "Roundcube",
-      "url": "https://github.com/roundcube"
-    }
-  }
+  "minimum-stability": "dev"
 }
