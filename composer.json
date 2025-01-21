@@ -11,13 +11,17 @@
   "license": "GPL-3.0-or-later",
   "authors": [
     {
-      "name": "Bruce Wells",
+      "name": "Francesco Bianco",
+      "homepage": "https://github.com/francescobianco"
+		},
+		{
+			"name": "Bruce Wells",
       "homepage": "https://github.com/phpfui"
     }
   ],
   "require": {
     "php": ">=8.2",
-    "javanile/php-imap2": "^0.1.4"
+    "zbateson/mail-mime-parser": "^3.0"
   },
   "require-dev": {
 		"roave/security-advisories": "dev-latest"
@@ -27,5 +31,5 @@
       "Javanile\\Imap2\\": "src"
     }
 	},
-  "minimum-stability": "dev"
+	"minimum-stability": "stable"
 }

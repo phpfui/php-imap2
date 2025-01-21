@@ -315,7 +315,7 @@ if (!function_exists('imap_listscan'))
     {
     return Mailbox::listScan($imap, $reference, $pattern, $content);
     }
-
+	}
 
 if (!function_exists('imap_scan'))
   {
@@ -679,7 +679,7 @@ if (!function_exists('imap_getacl'))
 
 if (!function_exists('imap_setacl'))
   {
-  Function imap_setacl(Connection $imap, $mailbox, $userId, $rights)
+  function imap_setacl(Connection $imap, $mailbox, $userId, $rights)
     {
     throw new \Exception(__FUNCTION__ . ' is not implemented.');
     }
