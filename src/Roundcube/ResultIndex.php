@@ -19,10 +19,10 @@
  * +-----------------------------------------------------------------------+
  */
 
-namespace Javanile\Imap2\Roundcube;
+namespace PHPFUI\Imap2\Roundcube;
 
-use Javanile\Imap2\Offset;
-use Javanile\Imap2\rcube_imap_generic;
+use PHPFUI\Imap2\Offset;
+use PHPFUI\Imap2\rcube_imap_generic;
 
 /**
  * Class for accessing IMAP's SORT/SEARCH/ESEARCH result
@@ -86,51 +86,6 @@ class ResultIndex
 	public function count_messages()
 	{
 		return $this->count();
-	}
-
-	/**
-	 * Check if the given message ID exists in the object
-	 *
-	 * @param int  $msgid     Message ID
-	 * @param bool $get_index When enabled element's index will be returned.
-	 *                        Elements are indexed starting with 0
-	 *
-	 * @return mixed False if message ID doesn't exist, True if exists or
-	 *               index of the element if $get_index=true
-	 */
-	public function exists($msgid, $get_index = false)
-	{
-		if (empty($this->raw_data)) {
-			return false;
-		}
-
-		$msgid = (int)$msgid;
-		$begin = \implode('|', ['^', \preg_quote(self::SEPARATOR_ELEMENT, '/')]);
-		$end = \implode('|', ['$', \preg_quote(self::SEPARATOR_ELEMENT, '/')]);
-
-		if (\preg_match(
-			"/({$begin}){$msgid}({$end})/",
-			$this->raw_data,
-			$m,
-			$get_index ? PREG_OFFSET_CAPTURE : null
-		)
-		) {
-			if ($get_index) {
-				$idx = 0;
-
-				if ($m[0][1]) {
-					$idx = 1 + \substr_count($this->raw_data, self::SEPARATOR_ELEMENT, 0, $m[0][1]);
-				}
-				// cache position of this element, so we can use it in get_element()
-				$this->meta['pos'][$idx] = (int)$m[0][1];
-
-				return $idx;
-			}
-
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -251,7 +206,7 @@ class ResultIndex
 	 *
 	 * @return array|string Response parameters or parameter value
 	 */
-	public function get_parameters($param = null)
+	public function get_parameters(?string $param = null) : array|string
 	{
 		$params = $this->params;
 		$params['MAILBOX'] = $this->mailbox;
@@ -269,7 +224,7 @@ class ResultIndex
 	 *
 	 * @param string $data IMAP response string
 	 */
-	public function init($data = null) : void
+	public function init(?string $data = null) : void
 	{
 		$this->meta = [];
 
@@ -351,16 +306,6 @@ class ResultIndex
 	}
 
 	/**
-	 * Checks if the result is empty
-	 *
-	 * @return bool True if the result is empty, False otherwise
-	 */
-	public function is_empty()
-	{
-		return empty($this->raw_data);
-	}
-
-	/**
 	 * Checks the result from IMAP command
 	 *
 	 * @return bool True if the result is an error, False otherwise
@@ -396,40 +341,6 @@ class ResultIndex
 		}
 
 		return $this->meta['min'];
-	}
-
-	/**
-	 * Reverts order of elements in the result
-	 */
-	public function revert() : void
-	{
-		$this->order = 'ASC' == $this->order ? 'DESC' : 'ASC';
-
-		if (empty($this->raw_data)) {
-			return;
-		}
-
-		$data = $this->get();
-		$data = \array_reverse($data);
-		$this->raw_data = \implode(self::SEPARATOR_ELEMENT, $data);
-
-		$this->meta['pos'] = [];
-	}
-
-	/**
-	 * Slices data set.
-	 *
-	 * @param $offset Offset (as for PHP's array_slice())
-	 * @param $length Number of elements (as for PHP's array_slice())
-	 */
-	public function slice($offset, $length) : void
-	{
-		$data = $this->get();
-		$data = \array_slice($data, $offset, $length);
-
-		$this->meta = [];
-		$this->meta['count'] = \count($data);
-		$this->raw_data = \implode(self::SEPARATOR_ELEMENT, $data);
 	}
 
 	/**

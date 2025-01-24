@@ -3,15 +3,15 @@
 /*
  * This file is part of the PHP IMAP2 package.
  *
- * (c) Francesco Bianco <bianco@javanile.org>
+ * (c) Francesco Bianco <bianco@PHPFUI.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Javanile\Imap2;
+namespace PHPFUI\Imap2;
 
-use Javanile\Imap2\Roundcube\ImapClient;
+use PHPFUI\Imap2\Roundcube\ImapClient;
 
 class Connection
 {
@@ -127,16 +127,15 @@ class Connection
 		$this->currentMailbox = $mailboxParts['mailbox'];
 	}
 
-	public static function ping(Connection $imap) : ?bool
+	public static function ping(Connection $imap) : bool
 	{
 		$client = $imap->getClient();
-		//$client->setDebug(true);
 		$status = $client->status($imap->getMailboxName(), ['UIDNEXT']);
 
 		return isset($status['UIDNEXT']) && $status['UIDNEXT'] > 0;
 	}
 
-	public static function reopen(Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : ?bool
+	public static function reopen(Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : bool
 	{
 		$imap->openMailbox($mailbox);
 

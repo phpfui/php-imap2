@@ -3,13 +3,13 @@
 /*
  * This file is part of the PHP IMAP2 package.
  *
- * (c) Francesco Bianco <bianco@javanile.org>
+ * (c) Francesco Bianco <bianco@PHPFUI.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Javanile\Imap2;
+namespace PHPFUI\Imap2;
 
 class Mail
 	{
@@ -29,7 +29,7 @@ class Mail
 
 		if (! ($flags & CP_UID))
 			{
-			$messageNums = ImapHelpers::idToUid($imap, $messageNums);
+			$messageNums = \PHPFUI\Imap2\Message::idToUid($imap, $messageNums);
 			}
 
 		$from = $imap->getMailboxName();
@@ -43,14 +43,14 @@ class Mail
 	 *
 	 * @return false|mixed
 	 */
-	public static function move(Connection $imap, $messageNums, $mailbox, $flags = 0)
+	public static function move(Connection $imap, $messageNums, string $mailbox, int $flags = 0)
 		{
 		$client = $imap->getClient();
 		//$client->setDebug(true);
 
 		if (! ($flags & CP_UID))
 			{
-			$messageNums = ImapHelpers::idToUid($imap, $messageNums);
+			$messageNums = \PHPFUI\Imap2\Message::idToUid($imap, $messageNums);
 			}
 
 		return $client->move($messageNums, $imap->getMailboxName(), $mailbox);

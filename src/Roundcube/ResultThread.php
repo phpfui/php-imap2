@@ -19,11 +19,11 @@
  * +-----------------------------------------------------------------------+
  */
 
-namespace Javanile\Imap2\Roundcube;
+namespace PHPFUI\Imap2\Roundcube;
 
-use Javanile\Imap2\Offset;
-use Javanile\Imap2\rcube_imap_generic;
-use Javanile\Imap2\rcube_result_index;
+use PHPFUI\Imap2\Offset;
+use PHPFUI\Imap2\rcube_imap_generic;
+use PHPFUI\Imap2\Roundcube\ResultIndex;
 
 /**
  * Class for accessing IMAP's THREAD result
@@ -104,55 +104,6 @@ class ResultThread
 			$this->meta['count'] = $this->meta['messages'];
 
 		return $this->meta['messages'];
-	}
-
-	/**
-	 * Check if the given message ID exists in the object
-	 *
-	 * @param int $msgid Message ID
-	 * @param bool $get_index When enabled element's index will be returned.
-	 *                        Elements are indexed starting with 0
-	 *
-	 * @return bool True on success, False if message ID doesn't exist
-	 */
-	public function exists($msgid, $get_index = false)
-	{
-		$msgid = (int)$msgid;
-		$begin = \implode('|', [
-			'^',
-			\preg_quote(self::SEPARATOR_ELEMENT, '/'),
-			\preg_quote(self::SEPARATOR_LEVEL, '/'),
-		]);
-		$end = \implode('|', [
-			'$',
-			\preg_quote(self::SEPARATOR_ELEMENT, '/'),
-			\preg_quote(self::SEPARATOR_ITEM, '/'),
-		]);
-
-		if (\preg_match(
-			"/({$begin}){$msgid}({$end})/",
-			$this->raw_data,
-			$m,
-			$get_index ? PREG_OFFSET_CAPTURE : null
-		)
-		) {
-			if ($get_index) {
-				$idx = 0;
-
-				if ($m[0][1]) {
-					$idx = \substr_count($this->raw_data, self::SEPARATOR_ELEMENT, 0, $m[0][1] + 1)
-						+ \substr_count($this->raw_data, self::SEPARATOR_ITEM, 0, $m[0][1] + 1);
-				}
-				// cache position of this element, so we can use it in get_element()
-				$this->meta['pos'][$idx] = (int)$m[0][1];
-
-				return $idx;
-			}
-
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -319,27 +270,11 @@ class ResultThread
 	}
 
 	/**
-	 * Returns thread depth and children data
-	 *
-	 * @return array Thread data
-	 */
-	public function get_thread_data()
-	{
-		$data = $this->get_tree();
-		$depth = [];
-		$children = [];
-
-		$this->build_thread_data($data, $depth, $children);
-
-		return [$depth, $children];
-	}
-
-	/**
 	 * Returns data as tree
 	 *
 	 * @return array Data tree
 	 */
-	public function get_tree()
+	public function get_tree() : array
 	{
 		$datalen = \strlen($this->raw_data);
 		$result = [];
@@ -395,16 +330,6 @@ class ResultThread
 	}
 
 	/**
-	 * Checks if the result is empty
-	 *
-	 * @return bool True if the result is empty, False otherwise
-	 */
-	public function is_empty()
-	{
-		return empty($this->raw_data);
-	}
-
-	/**
 	 * Checks the result from IMAP command
 	 *
 	 * @return bool True if the result is an error, False otherwise
@@ -443,43 +368,9 @@ class ResultThread
 	}
 
 	/**
-	 * Reverts order of elements in the result
-	 */
-	public function revert() : void
-	{
-		$this->order = 'ASC' == $this->order ? 'DESC' : 'ASC';
-
-		if (empty($this->raw_data)) {
-			return;
-		}
-
-		$data = \explode(self::SEPARATOR_ELEMENT, $this->raw_data);
-		$data = \array_reverse($data);
-		$this->raw_data = \implode(self::SEPARATOR_ELEMENT, $data);
-
-		$this->meta['pos'] = [];
-	}
-
-	/**
-	 * Slices data set.
-	 *
-	 * @param $offset Offset (as for PHP's array_slice())
-	 * @param $length Number of elements (as for PHP's array_slice())
-	 */
-	public function slice($offset, $length) : void
-	{
-		$data = \explode(self::SEPARATOR_ELEMENT, $this->raw_data);
-		$data = \array_slice($data, $offset, $length);
-
-		$this->meta = [];
-		$this->meta['count'] = \count($data);
-		$this->raw_data = \implode(self::SEPARATOR_ELEMENT, $data);
-	}
-
-	/**
 	 * THREAD=REFS sorting implementation (based on provided index)
 	 *
-	 * @param rcube_result_index $index  Sorted message identifiers
+	 * @param ResultIndex $index  Sorted message identifiers
 	 */
 	public function sort($index) : void
 	{
