@@ -11,5 +11,4 @@ $config = include 'vendor/phpfui/phpunit-syntax-coverage/PhpCsFixer.php';
 return $config->setFinder(PhpCsFixer\Finder::create()
 			->exclude('vendor')
 			->in(__DIR__.'/src')
-			->in(__DIR__.'/tests')
     );

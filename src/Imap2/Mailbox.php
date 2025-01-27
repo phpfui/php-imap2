@@ -33,7 +33,7 @@ class Mailbox
 		return (bool)$success;
 	}
 
-	public static function check(\IMAP\Connection $imap) : stdClass
+	public static function check(\IMAP\Connection $imap) : \stdClass
 	{
 		$imap->selectMailbox();
 

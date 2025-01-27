@@ -69,16 +69,18 @@ class BodyStructure
 		return self::extractBodyStructure($message->bodystructure);
 	}
 
-	protected static function extractBodyStructure($structure)
+	protected static function extractBodyStructure($structure) : ?\stdClass
 	{
 
 		// if NIL
 		if ( null === $structure )
-			return;
+			return null;
 
 		// body structure list
-		if ( ! $length = \count($structure) )
-			return;
+		$length = \count($structure);
+
+		if ( ! $length)
+			return null;
 
 		$body = (object)[
 			'type' => self::TYPEOTHER,
@@ -153,9 +155,6 @@ class BodyStructure
 		}
 		// not multipart, parse type name
 		else {
-
-			// empty body?
-			if ( ! $length ) return (object)[];
 
 			// assume unknown type
 			$body->type = self::TYPEOTHER;
@@ -272,12 +271,7 @@ class BodyStructure
 
 		if ( null === $body->parameters ) $body->parameters = null;
 
-		if ( ! $body->bytes ) $body->bytes = null;
-
-		if ( ! $body->lines ) $body->lines = null;
-
 		return $body;
-
 	}
 
 	protected static function extractParameters(array $attributes, array $parameters) : array

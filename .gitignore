@@ -3,3 +3,4 @@ composer.lock
 coverage.xml
 .env
 .php-cs-fixer.cache
+.phpunit.cache

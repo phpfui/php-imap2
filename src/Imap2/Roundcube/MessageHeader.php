@@ -28,13 +28,14 @@ namespace PHPFUI\Imap2\Roundcube;
  */
 class MessageHeader
 {
-	public $modseq;
-
-	public $envelope;
-
-	public $bodypart;
+	/**
+	 * Message additional recipients (bCc)
+	 */
+	public string $bcc;
 
 	public $body;
+
+	public $bodypart;
 
 	/**
 	 * IMAP bodystructure string
@@ -45,11 +46,6 @@ class MessageHeader
 	 * Message additional recipients (Cc)
 	 */
 	public string $cc;
-
-	/**
-	 * Message additional recipients (bCc)
-	 */
-	public string $bcc;
 
 	/**
 	 * Message charset
@@ -70,6 +66,8 @@ class MessageHeader
 	 * Message encoding
 	 */
 	public string $encoding;
+
+	public $envelope;
 
 	/**
 	 * Message flags
@@ -110,6 +108,8 @@ class MessageHeader
 	 * Message identifier (Message-ID)
 	 */
 	public string $messageID;
+
+	public $modseq;
 
 	/**
 	 * Other message headers

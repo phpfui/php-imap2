@@ -21,9 +21,6 @@
 
 namespace PHPFUI\Imap2\Roundcube;
 
-use PHPFUI\Imap2\rcube;
-use PHPFUI\Imap2\rcube_mime_decode;
-
 /**
  * Class for parsing MIME messages
  *
@@ -302,76 +299,5 @@ class Mime
 		}
 
 		return IMAP2_CHARSET;
-	}
-
-	/**
-	 * E-mail address list parser
-	 */
-	private static function parse_address_list($str, $decode = true, $fallback = null)
-	{
-		// remove any newlines and carriage returns before
-		$str = \preg_replace('/\r?\n(\s|\t)?/', ' ', $str);
-
-		// extract list items, remove comments
-		$str = self::explode_header_string(',;', $str, true);
-		$result = [];
-
-		// simplified regexp, supporting quoted local part
-		$email_rx = '(\S+|("\s*(?:[^"\f\n\r\t\v\b\s]+\s*)+"))@\S+';
-
-		foreach ($str as $key => $val) {
-			$name = '';
-			$address = '';
-			$val = \trim($val);
-
-			if (\preg_match('/(.*)<(' . $email_rx . ')>$/', $val, $m)) {
-				$address = $m[2];
-				$name = \trim($m[1]);
-			}
-			elseif (\preg_match('/^(' . $email_rx . ')$/', $val, $m)) {
-				$address = $m[1];
-				$name = '';
-			}
-			// special case (#1489092)
-			elseif (\preg_match('/(\s*<MAILER-DAEMON>)$/', $val, $m)) {
-				$address = 'MAILER-DAEMON';
-				$name = \substr($val, 0, -\strlen($m[1]));
-			}
-			elseif (\preg_match('/(' . $email_rx . ')/', $val, $m)) {
-				$name = $m[1];
-			}
-			else {
-				$name = $val;
-			}
-
-			// dequote and/or decode name
-			if ($name) {
-				if ('"' == $name[0] && '"' == $name[\strlen($name) - 1]) {
-					$name = \substr($name, 1, -1);
-					$name = \stripslashes($name);
-				}
-
-				if ($decode) {
-					$name = self::decode_header($name, $fallback);
-
-					// some clients encode addressee name with quotes around it
-					if ('"' == $name[0] && '"' == $name[\strlen($name) - 1]) {
-						$name = \substr($name, 1, -1);
-					}
-				}
-			}
-
-			if (! $address && $name) {
-				$address = $name;
-				$name = '';
-			}
-
-			if ($address) {
-				$address = self::fix_email($address);
-				$result[$key] = ['name' => $name, 'address' => $address];
-			}
-		}
-
-		return $result;
 	}
 }

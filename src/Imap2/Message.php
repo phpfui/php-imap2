@@ -48,8 +48,20 @@ class Message
 	}
 
 	/**
+	 * Clears cache
+	 */
+	public static function clearCache(\IMAP\Connection $imap, int $flags) : true
+	{
+		$client = $imap->getClient();
+
+		$client->clear_mailbox_cache();
+		$client->clear_status_cache();
+
+		return true;
+	}
+
+	/**
 	 * Clears flags on messages.
-	 *
 	 *
 	 * @return false|string
 	 */
@@ -74,7 +86,7 @@ class Message
 		return false;
 	}
 
-	public static function delete(\IMAP\Connection $imap, int $messageNums, int $flags = 0)
+	public static function delete(\IMAP\Connection $imap, string $messageNums, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -362,25 +374,6 @@ class Message
 		return \implode(',', $uid);
 		}
 
-	/**
-	 * Convert a string contain a sequence of uid(s) to an equivalent with id(s).
-	 */
-	public static function uidToId(\IMAP\Connection $imap, $messageUid) : string
-		{
-		$client = $imap->getClient();
-
-		$messages = $client->fetch($imap->getMailboxName(), $messageUid, true, ['UID']);
-
-		$id = [];
-
-		foreach ($messages as $message)
-			{
-			$id[] = $message->id;
-			}
-
-		return \implode(',', $id);
-		}
-
 	public static function msgno(\IMAP\Connection $imap, $messageUid)
 	{
 		$client = $imap->getClient();
@@ -432,7 +425,7 @@ class Message
 	 *
 	 * @return bool
 	 */
-	public static function setFlagFull(\IMAP\Connection $imap, $sequence, int $flag, $options = 0)
+	public static function setFlagFull(\IMAP\Connection $imap, $sequence, string $flag, int $options = 0)
 	{
 		$client = $imap->getClient();
 
@@ -477,7 +470,26 @@ class Message
 		return \is_numeric($uid) ? (int)$uid : $uid;
 	}
 
-	public static function undelete(\IMAP\Connection $imap, $messageNums, $flags = 0)
+	/**
+	 * Convert a string contain a sequence of uid(s) to an equivalent with id(s).
+	 */
+	public static function uidToId(\IMAP\Connection $imap, $messageUid) : string
+		{
+		$client = $imap->getClient();
+
+		$messages = $client->fetch($imap->getMailboxName(), $messageUid, true, ['UID']);
+
+		$id = [];
+
+		foreach ($messages as $message)
+			{
+			$id[] = $message->id;
+			}
+
+		return \implode(',', $id);
+		}
+
+	public static function undelete(\IMAP\Connection $imap, string $messageNums, int $flags = 0)
 	{
 		$client = $imap->getClient();
 

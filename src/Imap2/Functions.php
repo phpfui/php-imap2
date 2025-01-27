@@ -27,11 +27,12 @@ class Functions
 
 	}
 
-	public static function getAddressObjectList(array $addressList, string $defaultHost = 'UNKNOWN')
-	{
+	public static function getAddressObjectList(array $addressList, string $defaultHost = 'UNKNOWN') : array
+		{
 		$addressObjectList = [];
 
-		foreach ($addressList as $toAddress) {
+		foreach ($addressList as $toAddress)
+			{
 			$email = \explode('@', $toAddress->getEmail());
 
 			$addressObject = (object)[
@@ -41,15 +42,21 @@ class Functions
 
 			$personal = $toAddress->getName();
 
-			if ($personal) {
+			if ($personal)
+				{
 				$addressObject->personal = $personal;
-			}
+				}
+			else
+				{
+				$addressObject->personal = '';
+				}
+			$addressObject->adl = '';
 
 			$addressObjectList[] = $addressObject;
-		}
+			}
 
 		return $addressObjectList;
-	}
+		}
 
 	public static function getHostFromMailbox(string|array $mailbox) : string
 	{

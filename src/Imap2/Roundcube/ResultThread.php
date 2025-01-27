@@ -21,10 +21,6 @@
 
 namespace PHPFUI\Imap2\Roundcube;
 
-use PHPFUI\Imap2\Offset;
-use PHPFUI\Imap2\rcube_imap_generic;
-use PHPFUI\Imap2\Roundcube\ResultIndex;
-
 /**
  * Class for accessing IMAP's THREAD result
  *
@@ -41,20 +37,17 @@ class ResultThread
 
 	public $incomplete = false;
 
-	protected $mailbox;
+	protected array $meta = [];
 
-	protected $meta = [];
-
-	protected $order = 'ASC';
+	protected string $order = 'ASC';
 
 	protected $raw_data;
 
 	/**
 	 * Object constructor.
 	 */
-	public function __construct($mailbox = null, $data = null)
+	public function __construct(protected ?string $mailbox = null, ?string $data = null)
 	{
-		$this->mailbox = $mailbox;
 		$this->init($data);
 	}
 
@@ -63,10 +56,10 @@ class ResultThread
 	 *
 	 * @return int Number of elements
 	 */
-	public function count()
+	public function count() : int
 	{
 		if (isset($this->meta['count']) && null !== $this->meta['count'])
-			return $this->meta['count'];
+			return (int)$this->meta['count'];
 
 		if (empty($this->raw_data)) {
 			$this->meta['count'] = 0;
@@ -78,7 +71,7 @@ class ResultThread
 		if (! $this->meta['count'])
 			$this->meta['messages'] = 0;
 
-		return $this->meta['count'];
+		return (int)$this->meta['count'];
 	}
 
 	/**
@@ -111,7 +104,7 @@ class ResultThread
 	 *
 	 * @param array $roots List of IDs of thread roots.
 	 */
-	public function filter($roots) : void
+	public function filter(array $roots) : void
 	{
 		$datalen = \strlen($this->raw_data);
 		$roots = \array_flip($roots);
@@ -164,92 +157,6 @@ class ResultThread
 	}
 
 	/**
-	 * Return all messages in the result.
-	 *
-	 * @return array List of message identifiers
-	 */
-	public function get_compressed()
-	{
-		if (empty($this->raw_data)) {
-			return '';
-		}
-
-		return rcube_imap_generic::compressMessageSet($this->get());
-	}
-
-	/**
-	 * Return result element at specified index (all messages, not roots)
-	 *
-	 * @param int|string  $index  Element's index or "FIRST" or "LAST"
-	 *
-	 * @return int Element value
-	 */
-	public function get_element($index)
-	{
-		$count = $this->count();
-
-		if (! $count) {
-			return;
-		}
-
-		// first element
-		if (0 === $index || '0' === $index || 'FIRST' === $index) {
-			\preg_match('/^([0-9]+)/', $this->raw_data, $m);
-			$result = (int)$m[1];
-
-			return $result;
-		}
-
-		// last element
-		if ('LAST' === $index || $index == $count - 1) {
-			\preg_match('/([0-9]+)$/', $this->raw_data, $m);
-			$result = (int)$m[1];
-
-			return $result;
-		}
-
-		// do we know the position of the element or the neighbour of it?
-		if (! empty($this->meta['pos'])) {
-			$element = \preg_quote(self::SEPARATOR_ELEMENT, '/');
-			$item = \preg_quote(self::SEPARATOR_ITEM, '/') . '[0-9]+' . \preg_quote(self::SEPARATOR_LEVEL, '/') . '?';
-			$regexp = '(' . $element . '|' . $item . ')';
-
-			if (isset($this->meta['pos'][$index])) {
-				if (\preg_match('/([0-9]+)/', $this->raw_data, $m, null, $this->meta['pos'][$index]))
-					$result = $m[1];
-			}
-			elseif (isset($this->meta['pos'][$index - 1])) {
-				// get chunk of data after previous element
-				$data = \substr($this->raw_data, $this->meta['pos'][$index - 1] + 1, 50);
-				$data = \preg_replace('/^[0-9]+/', '', $data); // remove UID at $index position
-				$data = \preg_replace("/^{$regexp}/", '', $data); // remove separator
-
-				if (\preg_match('/^([0-9]+)/', $data, $m))
-					$result = $m[1];
-			}
-			elseif (isset($this->meta['pos'][$index + 1])) {
-				// get chunk of data before next element
-				$pos = \max(0, $this->meta['pos'][$index + 1] - 50);
-				$len = \min(50, $this->meta['pos'][$index + 1]);
-				$data = \substr($this->raw_data, $pos, $len);
-				$data = \preg_replace("/{$regexp}\$/", '', $data); // remove separator
-
-				if (\preg_match('/([0-9]+)$/', $data, $m))
-					$result = $m[1];
-			}
-
-			if (isset($result)) {
-				return (int)$result;
-			}
-		}
-
-		// Finally use less effective method
-		$data = $this->get();
-
-		return $data[$index];
-	}
-
-	/**
 	 * Returns response parameters e.g. MAILBOX, ORDER
 	 *
 	 * @param string $param Parameter name
@@ -298,7 +205,7 @@ class ResultThread
 	 *
 	 * @param string $data IMAP response string
 	 */
-	public function init($data = null) : void
+	public function init(?string $data = null) : void
 	{
 		$this->meta = [];
 
@@ -374,7 +281,7 @@ class ResultThread
 	 */
 	public function sort($index) : void
 	{
-		$this->sort_order = $index->get_parameters('ORDER');
+		$this->order = $index->get_parameters('ORDER');
 
 		if (empty($this->raw_data)) {
 			return;
@@ -480,7 +387,7 @@ class ResultThread
 	/**
 	 * IMAP THREAD response parser
 	 */
-	protected function parse_thread($str, $begin = 0, $end = 0, $depth = 0)
+	protected function parse_thread(string $str, int $begin = 0, int $end = 0, int $depth = 0) : string
 	{
 		// Don't be tempted to change $str to pass by reference to speed this up - it will slow it down by about
 		// 7 times instead :-) See comments on http://uk2.php.net/references and this article:
@@ -510,10 +417,6 @@ class ResultThread
 			// find next bracket
 			$stop = $begin + \strcspn($str, '()', $begin, $end - $begin);
 			$messages = \explode(' ', \trim(\substr($str, $begin, $stop - $begin)));
-
-			if (empty($messages)) {
-				return $node;
-			}
 
 			foreach ($messages as $msg) {
 				if ($msg) {

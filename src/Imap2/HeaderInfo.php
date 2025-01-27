@@ -13,7 +13,7 @@ namespace PHPFUI\Imap2;
 
 class HeaderInfo
 {
-	public static function fromMessage($message, $defaultHost) : \object
+	public static function fromMessage($message, $defaultHost) : \stdClass
 	{
 		$to = Functions::writeAddressFromEnvelope($message->envelope[5]);
 		$cc = Functions::writeAddressFromEnvelope($message->envelope[6]);
@@ -92,7 +92,7 @@ class HeaderInfo
 	}
 
 	/**
-	 * @return array<stdClass>
+	 * @return array<\stdClass>
 	 */
 	protected static function parseAddressList(string $address, string $defaultHost) : array
 	{

@@ -43,10 +43,9 @@ class Mail
 	 *
 	 * @return false|mixed
 	 */
-	public static function move(\IMAP\Connection $imap, $messageNums, string $mailbox, int $flags = 0)
+	public static function move(\IMAP\Connection $imap, string $messageNums, string $mailbox, int $flags = 0)
 		{
 		$client = $imap->getClient();
-		//$client->setDebug(true);
 
 		if (! ($flags & CP_UID))
 			{
@@ -54,33 +53,5 @@ class Mail
 			}
 
 		return $client->move($messageNums, $imap->getMailboxName(), $mailbox);
-		}
-
-	/**
-	 * Send an email message.
-	 *
-	 * @return false|mixed
-	 */
-	public static function send(string $to, string $subject, string $message, $additionalHeaders = null, ?string $cc = null, ?string $bcc = null, ?string $returnPath = null)
-		{
-		$client = $imap->getClient();
-
-		if (! ($options & ST_UID))
-			{
-			$messages = $client->fetch($imap->getMailboxName(), $sequence, false, ['UID']);
-
-			$uid = [];
-
-			foreach ($messages as $message)
-				{
-				$uid[] = $message->uid;
-				}
-
-			$sequence = \implode(',', $uid);
-			}
-
-		$client->flag($imap->getMailboxName(), $sequence, \strtoupper(\substr($flag, 1)));
-
-		return false;
 		}
 	}

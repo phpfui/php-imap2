@@ -22,7 +22,6 @@
 namespace PHPFUI\Imap2\Roundcube;
 
 use PHPFUI\Imap2\DateTime;
-use PHPFUI\Imap2\rcube;
 
 /**
  * Utility class providing common functions
@@ -72,11 +71,11 @@ class Utils
 			$mdy = $m[2] > 12 && $m[1] <= 12;
 			$day = $mdy ? $m[2] : $m[1];
 			$month = $mdy ? $m[1] : $m[2];
-			$date = \sprintf('%04d-%02d-%02d%s', $m[3], $month, $day, $m[4] ?: ' 00:00:00');
+			$date = \sprintf('%04d-%02d-%02d%s', $m[3], $month, $day, $m[4] ?? ' 00:00:00');
 		}
 		// I've found that YYYY.MM.DD is recognized wrong, so here's a fix
 		elseif (\preg_match('/^(\d{4})\.(\d{1,2})\.(\d{1,2})(\s.*)?$/', $date, $m)) {
-			$date = \sprintf('%04d-%02d-%02d%s', $m[1], $m[2], $m[3], $m[4] ?: ' 00:00:00');
+			$date = \sprintf('%04d-%02d-%02d%s', $m[1], $m[2], $m[3], $m[4] ?? ' 00:00:00');
 		}
 
 		return $date;

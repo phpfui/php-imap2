@@ -23,8 +23,6 @@
 
 namespace PHPFUI\Imap2\Roundcube;
 
-use PHPFUI\Imap2\ErrorException;
-
 /**
  * Character sets conversion functionality
  *
@@ -204,7 +202,7 @@ class Charset
 			$res = \mb_convert_encoding($input, 'UTF-8', 'UTF-8');
 			\mb_substitute_character($msch);
 
-			if (false !== $res) {
+			if (false !== $res) { // @phpstan-ignore-line
 				return $res;
 			}
 		}
@@ -337,8 +335,8 @@ class Charset
 				'ISO-2022-JP' => 'ISO-2022-JP-MS',
 			];
 
-			$mb_from = $aliases[$from] ?: $from;
-			$mb_to = $aliases[$to] ?: $to;
+			$mb_from = $aliases[$from] ?? $from;
+			$mb_to = $aliases[$to] ?? $to;
 
 			// Do the same as //IGNORE with iconv
 			\mb_substitute_character('none');
@@ -398,9 +396,9 @@ class Charset
 	 *
 	 * @param string $input Input charset name
 	 *
-	 * @return string The validated charset name
+	 * @return ?string The validated charset name
 	 */
-	public static function parse_charset($input)
+	public static function parse_charset($input) : ?string
 	{
 		static $charsets = [];
 		$charset = \strtoupper($input);
@@ -699,7 +697,7 @@ class Charset
 
 		$u8len = \strlen($str);
 		$base64 = 0;
-		$i = 0;
+		$i = $b = $k = 0;
 		$p = '';
 		$err = '';
 
