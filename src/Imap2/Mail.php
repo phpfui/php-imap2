@@ -18,7 +18,7 @@ class Mail
 	 *
 	 * @return false|mixed
 	 */
-	public static function copy(Connection $imap, $messageNums, string $mailbox, int $flags = 0)
+	public static function copy(\IMAP\Connection $imap, $messageNums, string $mailbox, int $flags = 0)
 		{
 		if ($flags & CP_MOVE)
 			{
@@ -43,7 +43,7 @@ class Mail
 	 *
 	 * @return false|mixed
 	 */
-	public static function move(Connection $imap, $messageNums, string $mailbox, int $flags = 0)
+	public static function move(\IMAP\Connection $imap, $messageNums, string $mailbox, int $flags = 0)
 		{
 		$client = $imap->getClient();
 		//$client->setDebug(true);

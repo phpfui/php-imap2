@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PHPFUI\Imap2;
+namespace IMAP;
 
 use PHPFUI\Imap2\Roundcube\ImapClient;
 
@@ -17,7 +17,7 @@ class Connection
 {
 	protected ImapClient $client;
 
-	protected $connected;
+	protected bool $connected;
 
 	protected string $currentMailbox;
 
@@ -36,7 +36,7 @@ class Connection
 		$this->client = new ImapClient();
 	}
 
-	public static function close(Connection $imap, int $flags = 0)
+	public static function close(\IMAP\Connection $imap, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -87,10 +87,10 @@ class Connection
 
 	public function isConnected()
 	{
-		return (bool)($this->connected);
+		return $this->connected;
 	}
 
-	public static function isValid(Connection $imap)
+	public static function isValid(\IMAP\Connection $imap)
 	{
 		return $imap->isConnected();
 	}
@@ -127,7 +127,7 @@ class Connection
 		$this->currentMailbox = $mailboxParts['mailbox'];
 	}
 
-	public static function ping(Connection $imap) : bool
+	public static function ping(\IMAP\Connection $imap) : bool
 	{
 		$client = $imap->getClient();
 		$status = $client->status($imap->getMailboxName(), ['UIDNEXT']);
@@ -135,7 +135,7 @@ class Connection
 		return isset($status['UIDNEXT']) && $status['UIDNEXT'] > 0;
 	}
 
-	public static function reopen(Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : bool
+	public static function reopen(\IMAP\Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : bool
 	{
 		$imap->openMailbox($mailbox);
 
@@ -182,7 +182,6 @@ class Connection
 	{
 		$this->connected = false;
 		$client = $this->getClient();
-		//$client->setDebug(true);
 
 		$success = $client->connect($this->host, $this->user, $this->password, [
 			'port' => $this->port,

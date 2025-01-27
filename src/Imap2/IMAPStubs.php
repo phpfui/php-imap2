@@ -1,6 +1,5 @@
 <?php
 
-use PHPFUI\Imap2\Connection;
 use PHPFUI\Imap2\Mail;
 use PHPFUI\Imap2\Errors;
 use PHPFUI\Imap2\Mailbox;
@@ -306,7 +305,7 @@ if (! \function_exists('imap_alerts'))
 
 if (! \function_exists('imap_append'))
   {
-  function imap_append(Connection $imap, string $folder, string $message, ?string $options = null, ?string $internal_date = null) : bool
+  function imap_append(\IMAP\Connection $imap, string $folder, string $message, ?string $options = null, ?string $internal_date = null) : bool
 		{
 		return Mailbox::append($imap, $folder, $message, $options, $internal_date);
 		}
@@ -330,7 +329,7 @@ if (! \function_exists('imap_binary'))
 
 if (! \function_exists('imap_body'))
   {
-  function imap_body(Connection $imap, int $message_num, int $flags = 0) : string|false
+  function imap_body(\IMAP\Connection $imap, int $message_num, int $flags = 0) : string|false
 		{
 		return Message::body($imap, $message_num, $flags);
 		}
@@ -338,7 +337,7 @@ if (! \function_exists('imap_body'))
 
 if (! \function_exists('imap_check'))
   {
-  function imap_check(Connection $imap) : stdClass|false
+  function imap_check(\IMAP\Connection $imap) : stdClass|false
 		{
 		return Mailbox::check($imap);
 		}
@@ -346,7 +345,7 @@ if (! \function_exists('imap_check'))
 
 if (! \function_exists('imap_clearflag_full'))
   {
-  function imap_clearflag_full(Connection $imap, string $sequence, string $flag, int $options = 0) : true
+  function imap_clearflag_full(\IMAP\Connection $imap, string $sequence, string $flag, int $options = 0) : true
 		{
 		return Message::undelete($imap, $message_nums, $flag);
 		}
@@ -354,7 +353,7 @@ if (! \function_exists('imap_clearflag_full'))
 
 if (! \function_exists('imap_close'))
   {
-  function imap_close(Connection $imap, int $flags = 0) : true
+  function imap_close(\IMAP\Connection $imap, int $flags = 0) : true
 		{
 		return Connection::close($imap, $flags);
 		}
@@ -362,7 +361,7 @@ if (! \function_exists('imap_close'))
 
 if (! \function_exists('imap_create'))
   {
-  function imap_create(Connection $imap, string $mailbox) : bool
+  function imap_create(\IMAP\Connection $imap, string $mailbox) : bool
 		{
 		return Mailbox::createMailbox($imap, $mailbox);
 		}
@@ -370,7 +369,7 @@ if (! \function_exists('imap_create'))
 
 if (! \function_exists('imap_createmailbox'))
   {
-  function imap_createmailbox(Connection $imap, string $mailbox) : bool
+  function imap_createmailbox(\IMAP\Connection $imap, string $mailbox) : bool
 		{
 		return Mailbox::createMailbox($imap, $mailbox);
 		}
@@ -378,7 +377,7 @@ if (! \function_exists('imap_createmailbox'))
 
 if (! \function_exists('imap_delete'))
   {
-  function imap_delete(Connection $imap, string $message_nums, int $flags = 0) : true
+  function imap_delete(\IMAP\Connection $imap, string $message_nums, int $flags = 0) : true
 		{
 		return Message::delete($imap, $message_nums, $flags);
 		}
@@ -386,7 +385,7 @@ if (! \function_exists('imap_delete'))
 
 if (! \function_exists('imap_deletemailbox'))
   {
-  function imap_deletemailbox(Connection $imap, string $mailbox) : bool
+  function imap_deletemailbox(\IMAP\Connection $imap, string $mailbox) : bool
 		{
 		return Mailbox::deleteMailbox($imap, $mailbox);
 		}
@@ -410,7 +409,7 @@ if (! \function_exists('imap_expunge'))
 
 if (! \function_exists('imap_fetch_overview'))
   {
-  function imap_fetch_overview(Connection $imap, string $sequence, int $flags = 0) : array|false
+  function imap_fetch_overview(\IMAP\Connection $imap, string $sequence, int $flags = 0) : array|false
 		{
 		return Message::fetchOverview($imap, $sequence, $flags);
 		}
@@ -418,7 +417,7 @@ if (! \function_exists('imap_fetch_overview'))
 
 if (! \function_exists('imap_fetchbody'))
   {
-  function imap_fetchbody(Connection $imap, int $message_num, string $section, int $flags = 0) : string|false
+  function imap_fetchbody(\IMAP\Connection $imap, int $message_num, string $section, int $flags = 0) : string|false
 		{
 		return Message::fetchBody($imap, $message_num, $section, $flags);
 		}
@@ -426,7 +425,7 @@ if (! \function_exists('imap_fetchbody'))
 
 if (! \function_exists('imap_fetchheader'))
   {
-  function imap_fetchheader(Connection $imap, int $message_num, int $flags = 0) : string|false
+  function imap_fetchheader(\IMAP\Connection $imap, int $message_num, int $flags = 0) : string|false
 		{
 		return Message::fetchHeader($imap, $message_num, $flags);
 		}
@@ -434,7 +433,7 @@ if (! \function_exists('imap_fetchheader'))
 
 if (! \function_exists('imap_fetchmime'))
   {
-  function imap_fetchmime(Connection $imap, int $message_num, string $section, int $flags = 0) : string|false
+  function imap_fetchmime(\IMAP\Connection $imap, int $message_num, string $section, int $flags = 0) : string|false
 		{
 		return Message::fetchMime($imap, $message_num, $section, $flags);
 		}
@@ -442,7 +441,7 @@ if (! \function_exists('imap_fetchmime'))
 
 if (! \function_exists('imap_fetchstructure'))
   {
-  function imap_fetchstructure(Connection $imap, int $message_num, int $flags = 0) : stdClass|false
+  function imap_fetchstructure(\IMAP\Connection $imap, int $message_num, int $flags = 0) : stdClass|false
 		{
 		return Message::fetchStructure($imap, $message_num, $flags);
 		}
@@ -450,7 +449,7 @@ if (! \function_exists('imap_fetchstructure'))
 
 if (! \function_exists('imap_fetchtext'))
   {
-  function imap_fetchtext(Connection $imap, int $message_num, int $flags = 0) : string|false
+  function imap_fetchtext(\IMAP\Connection $imap, int $message_num, int $flags = 0) : string|false
 		{
 		return Message::body($imap, $message_num, $flags);
 		}
@@ -458,7 +457,7 @@ if (! \function_exists('imap_fetchtext'))
 
 if (! \function_exists('imap_gc'))
   {
-  function imap_gc(Connection $imap, int $flags) : true
+  function imap_gc(\IMAP\Connection $imap, int $flags) : true
 		{
 		return Message::expunge($imap, $flags);
 		}
@@ -466,7 +465,7 @@ if (! \function_exists('imap_gc'))
 
 if (! \function_exists('imap_get_quota'))
   {
-  function imap_get_quota(Connection $imap, $quotaRoot) : void
+  function imap_get_quota(\IMAP\Connection $imap, $quotaRoot) : void
 		{
 		throw new \Exception(__FUNCTION__ . ' is not implemented.');
 		}
@@ -474,7 +473,7 @@ if (! \function_exists('imap_get_quota'))
 
 if (! \function_exists('imap_get_quotaroot'))
   {
-  function imap_get_quotaroot(Connection $imap, $mailbox) : void
+  function imap_get_quotaroot(\IMAP\Connection $imap, $mailbox) : void
 		{
 		throw new \Exception(__FUNCTION__ . ' is not implemented.');
 		}
@@ -482,7 +481,7 @@ if (! \function_exists('imap_get_quotaroot'))
 
 if (! \function_exists('imap_getacl'))
   {
-  function imap_getacl(Connection $imap, $mailbox) : void
+  function imap_getacl(\IMAP\Connection $imap, $mailbox) : void
 		{
 		throw new \Exception(__FUNCTION__ . ' is not implemented.');
 		}
@@ -490,7 +489,7 @@ if (! \function_exists('imap_getacl'))
 
 if (! \function_exists('imap_getmailboxes'))
   {
-  function imap_getmailboxes(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_getmailboxes(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::getMailboxes($imap, $reference, $pattern);
 		}
@@ -498,7 +497,7 @@ if (! \function_exists('imap_getmailboxes'))
 
 if (! \function_exists('imap_getsubscribed'))
   {
-  function imap_getsubscribed(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_getsubscribed(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::getSubscribed($imap, $reference, $pattern);
 		}
@@ -506,7 +505,7 @@ if (! \function_exists('imap_getsubscribed'))
 
 if (! \function_exists('imap_header'))
   {
-  function imap_header(Connection $imap, int $message_num, int $from_length = 0, int $subject_length = 0) : stdClass|false
+  function imap_header(\IMAP\Connection $imap, int $message_num, int $from_length = 0, int $subject_length = 0) : stdClass|false
 		{
 		return Message::headerInfo($imap, $message_num, $from_length, $subject_length);
 		}
@@ -514,7 +513,7 @@ if (! \function_exists('imap_header'))
 
 if (! \function_exists('imap_headerinfo'))
   {
-  function imap_headerinfo(Connection $imap, int $message_num, int $from_length = 0, int $subject_length = 0) : stdClass|false
+  function imap_headerinfo(\IMAP\Connection $imap, int $message_num, int $from_length = 0, int $subject_length = 0) : stdClass|false
 		{
 		return Message::headerInfo($imap, $message_num, $from_length, $subject_length);
 		}
@@ -522,7 +521,7 @@ if (! \function_exists('imap_headerinfo'))
 
 if (! \function_exists('imap_headers'))
   {
-  function imap_headers(Connection $imap) : array|false
+  function imap_headers(\IMAP\Connection $imap) : array|false
 		{
 		return Message::headers($imap);
 		}
@@ -538,7 +537,7 @@ if (! \function_exists('imap_last_error'))
 
 if (! \function_exists('imap_list'))
   {
-  function imap_list(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_list(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::list($imap, $reference, $pattern);
 		}
@@ -546,7 +545,7 @@ if (! \function_exists('imap_list'))
 
 if (! \function_exists('imap_listmailbox'))
   {
-  function imap_listmailbox(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_listmailbox(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::list($imap, $reference, $pattern);
 		}
@@ -554,7 +553,7 @@ if (! \function_exists('imap_listmailbox'))
 
 if (! \function_exists('imap_listscan'))
   {
-  function imap_listscan(Connection $imap, string $reference, string $pattern, string $content) : array|false
+  function imap_listscan(\IMAP\Connection $imap, string $reference, string $pattern, string $content) : array|false
 		{
 		return Mailbox::listScan($imap, $reference, $pattern, $content);
 		}
@@ -562,7 +561,7 @@ if (! \function_exists('imap_listscan'))
 
 if (! \function_exists('imap_listsubscribed'))
   {
-  function imap_listsubscribed(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_listsubscribed(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::listSubscribed($imap, $reference, $pattern);
 		}
@@ -570,7 +569,7 @@ if (! \function_exists('imap_listsubscribed'))
 
 if (! \function_exists('imap_lsub'))
   {
-  function imap_lsub(Connection $imap, string $reference, string $pattern) : array|false
+  function imap_lsub(\IMAP\Connection $imap, string $reference, string $pattern) : array|false
 		{
 		return Mailbox::listSubscribed($imap, $reference, $pattern);
 		}
@@ -594,7 +593,7 @@ if (! \function_exists('imap_mail_compose'))
 
 if (! \function_exists('imap_mail_copy'))
   {
-  function imap_mail_copy(Connection $imap, string $message_nums, string $mailbox, int $flags = 0) : bool
+  function imap_mail_copy(\IMAP\Connection $imap, string $message_nums, string $mailbox, int $flags = 0) : bool
 		{
 		return Mail::copy($imap, $message_nums, $mailbox, $flags);
 		}
@@ -602,7 +601,7 @@ if (! \function_exists('imap_mail_copy'))
 
 if (! \function_exists('imap_mail_move'))
   {
-  function imap_mail_move(Connection $imap, string $message_nums, string $mailbox, int $flags = 0) : bool
+  function imap_mail_move(\IMAP\Connection $imap, string $message_nums, string $mailbox, int $flags = 0) : bool
 		{
 		return Mail::move($imap, $message_nums, $mailbox, $flags);
 		}
@@ -610,7 +609,7 @@ if (! \function_exists('imap_mail_move'))
 
 if (! \function_exists('imap_mailboxmsginfo'))
   {
-  function imap_mailboxmsginfo(Connection $imap) : stdclass
+  function imap_mailboxmsginfo(\IMAP\Connection $imap) : stdclass
 		{
 		return Mailbox::mailboxMsgInfo($imap);
 		}
@@ -626,7 +625,7 @@ if (! \function_exists('imap_mime_header_decode'))
 
 if (! \function_exists('imap_msgno'))
   {
-  function imap_msgno(Connection $imap, int $message_uid) : int
+  function imap_msgno(\IMAP\Connection $imap, int $message_uid) : int
 		{
 		return Message::msgNo($imap, $message_uid);
 		}
@@ -642,7 +641,7 @@ if (! \function_exists('imap_mutf7_to_utf8'))
 
 if (! \function_exists('imap_num_msg'))
   {
-  function imap_num_msg(Connection $imap) : int|false
+  function imap_num_msg(\IMAP\Connection $imap) : int|false
 		{
 		return Mailbox::numMsg($imap);
 		}
@@ -650,7 +649,7 @@ if (! \function_exists('imap_num_msg'))
 
 if (! \function_exists('imap_num_recent'))
   {
-  function imap_num_recent(Connection $imap) : int
+  function imap_num_recent(\IMAP\Connection $imap) : int
 		{
 		return Mailbox::numRecent($imap);
 		}
@@ -666,7 +665,7 @@ if (! \function_exists('imap_open'))
 
 if (! \function_exists('imap_ping'))
   {
-  function imap_ping(Connection $imap) : bool
+  function imap_ping(\IMAP\Connection $imap) : bool
 		{
 		return Connection::ping($imap);
 		}
@@ -682,7 +681,7 @@ if (! \function_exists('imap_qprint'))
 
 if (! \function_exists('imap_rename'))
   {
-  function imap_rename(Connection $imap, string $from, string $to) : bool
+  function imap_rename(\IMAP\Connection $imap, string $from, string $to) : bool
 		{
 		return Mailbox::renameMailbox($imap, $from, $to);
 		}
@@ -690,7 +689,7 @@ if (! \function_exists('imap_rename'))
 
 if (! \function_exists('imap_renamemailbox'))
   {
-  function imap_renamemailbox(Connection $imap, string $from, string $to) : bool
+  function imap_renamemailbox(\IMAP\Connection $imap, string $from, string $to) : bool
 		{
 		return Mailbox::renameMailbox($imap, $from, $to);
 		}
@@ -698,7 +697,7 @@ if (! \function_exists('imap_renamemailbox'))
 
 if (! \function_exists('imap_reopen'))
   {
-  function imap_reopen(Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : bool
+  function imap_reopen(\IMAP\Connection $imap, string $mailbox, int $flags = 0, int $retries = 0) : bool
 		{
 		return Connection::reopen($imap, $mailbox, $flags, $retries);
 		}
@@ -730,7 +729,7 @@ if (! \function_exists('imap_rfc822_write_address'))
 
 if (! \function_exists('imap_savebody'))
   {
-  function imap_savebody(Connection $imap, \resource|string|int $file, int $message_num, string $section = '', int $flags = 0) : bool
+  function imap_savebody(\IMAP\Connection $imap, \resource|string|int $file, int $message_num, string $section = '', int $flags = 0) : bool
 		{
 		return Message::saveBody($imap, $file, $message_num, $section, $flags);
 		}
@@ -738,7 +737,7 @@ if (! \function_exists('imap_savebody'))
 
 if (! \function_exists('imap_scan'))
   {
-  function imap_scan(Connection $imap, string $reference, string $pattern, string $content) : array|false
+  function imap_scan(\IMAP\Connection $imap, string $reference, string $pattern, string $content) : array|false
 		{
 		return Mailbox::listScan($imap, $reference, $pattern, $content);
 		}
@@ -746,7 +745,7 @@ if (! \function_exists('imap_scan'))
 
 if (! \function_exists('imap_scanmailbox'))
   {
-  function imap_scanmailbox(Connection $imap, string $reference, string $pattern, string $content) : array|false
+  function imap_scanmailbox(\IMAP\Connection $imap, string $reference, string $pattern, string $content) : array|false
 		{
 		return Mailbox::listScan($imap, $reference, $pattern, $content);
 		}
@@ -754,7 +753,7 @@ if (! \function_exists('imap_scanmailbox'))
 
 if (! \function_exists('imap_search'))
   {
-  function imap_search(Connection $imap, string $criteria, int $flags = SE_FREE, string $charset = '') : array|false
+  function imap_search(\IMAP\Connection $imap, string $criteria, int $flags = SE_FREE, string $charset = '') : array|false
 		{
 		return Message::search($imap, $criteria, $flags, $charset);
 		}
@@ -762,7 +761,7 @@ if (! \function_exists('imap_search'))
 
 if (! \function_exists('imap_set_quota'))
   {
-  function imap_set_quota(Connection $imap, string $quota_root) : array|false
+  function imap_set_quota(\IMAP\Connection $imap, string $quota_root) : array|false
 		{
 		throw new \Exception(__FUNCTION__ . ' is not implemented.');
 		}
@@ -770,7 +769,7 @@ if (! \function_exists('imap_set_quota'))
 
 if (! \function_exists('imap_setacl'))
   {
-  function imap_setacl(Connection $imap, $mailbox, $userId, $rights) : void
+  function imap_setacl(\IMAP\Connection $imap, $mailbox, $userId, $rights) : void
 		{
 		throw new \Exception(__FUNCTION__ . ' is not implemented.');
 		}
@@ -778,7 +777,7 @@ if (! \function_exists('imap_setacl'))
 
 if (! \function_exists('imap_setflag_full'))
   {
-  function imap_setflag_full(Connection $imap, string $sequence, string $flag, int $options = 0) : true
+  function imap_setflag_full(\IMAP\Connection $imap, string $sequence, string $flag, int $options = 0) : true
 		{
 		return Message::setFlagFull($imap, $sequence, $flag, $options);
 		}
@@ -786,7 +785,7 @@ if (! \function_exists('imap_setflag_full'))
 
 if (! \function_exists('imap_sort'))
   {
-  function imap_sort(Connection $imap, int $criteria, bool $reverse, int $flags = 0, ?string $search_criteria = null, ?string $charset = null) : array|false
+  function imap_sort(\IMAP\Connection $imap, int $criteria, bool $reverse, int $flags = 0, ?string $search_criteria = null, ?string $charset = null) : array|false
 		{
 		return Message::sort($imap, $criteria, $reverse, $flags, $search_criteria, $charset);
 		}
@@ -794,7 +793,7 @@ if (! \function_exists('imap_sort'))
 
 if (! \function_exists('imap_status'))
   {
-  function imap_status(Connection $imap, string $mailbox, int $flags) : stdClass|false
+  function imap_status(\IMAP\Connection $imap, string $mailbox, int $flags) : stdClass|false
 		{
 		return Mailbox::status($imap, $mailbox, $flags);
 		}
@@ -802,7 +801,7 @@ if (! \function_exists('imap_status'))
 
 if (! \function_exists('imap_subscribe'))
   {
-  function imap_subscribe(Connection $imap, string $mailbox) : bool
+  function imap_subscribe(\IMAP\Connection $imap, string $mailbox) : bool
 		{
 		return Mailbox::subscribe($imap, $mailbox);
 		}
@@ -810,7 +809,7 @@ if (! \function_exists('imap_subscribe'))
 
 if (! \function_exists('imap_thread'))
   {
-  function imap_thread(Connection $imap, int $flags = SE_FREE) : array|false
+  function imap_thread(\IMAP\Connection $imap, int $flags = SE_FREE) : array|false
 		{
 		return Thread::thread($imap, $flags);
 		}
@@ -826,7 +825,7 @@ if (! \function_exists('imap_timeout'))
 
 if (! \function_exists('imap_uid'))
   {
-  function imap_uid(Connection $imap, int $message_num) : int|false
+  function imap_uid(\IMAP\Connection $imap, int $message_num) : int|false
 		{
 		return Message::uid($imap, $message_num);
 		}
@@ -834,7 +833,7 @@ if (! \function_exists('imap_uid'))
 
 if (! \function_exists('imap_undelete'))
   {
-  function imap_undelete(Connection $imap, string $message_nums, int $flags = 0) : true
+  function imap_undelete(\IMAP\Connection $imap, string $message_nums, int $flags = 0) : true
 		{
 		return Message::undelete($imap, $message_nums, $flags);
 		}
@@ -842,7 +841,7 @@ if (! \function_exists('imap_undelete'))
 
 if (! \function_exists('imap_unsubscribe'))
   {
-  function imap_unsubscribe(Connection $imap, string $mailbox) : bool
+  function imap_unsubscribe(\IMAP\Connection $imap, string $mailbox) : bool
 		{
 		return Mailbox::unsubscribe($imap, $mailbox);
 		}

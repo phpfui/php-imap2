@@ -32,7 +32,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Javanile\\Imap2\\": "src"
+      "PHPFUI\\": "src/Imap2/"
+      "IMAP\\": "src/IMAP/"
     }
 	},
 	"minimum-stability": "stable"

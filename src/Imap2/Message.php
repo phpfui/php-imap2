@@ -13,7 +13,7 @@ namespace PHPFUI\Imap2;
 
 class Message
 {
-	public static function body(Connection $imap, int $messageNum, int $flags = 0)
+	public static function body(\IMAP\Connection $imap, int $messageNum, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -34,7 +34,7 @@ class Message
 		return $messages[$messageNum]->bodypart['TEXT'];
 	}
 
-	public static function bodyStruct(Connection $imap, int $messageNum, $section)
+	public static function bodyStruct(\IMAP\Connection $imap, int $messageNum, $section)
 	{
 		$client = $imap->getClient();
 
@@ -53,7 +53,7 @@ class Message
 	 *
 	 * @return false|string
 	 */
-	public static function clearFlagFull(Connection $imap, $sequence, $flag, $options = 0)
+	public static function clearFlagFull(\IMAP\Connection $imap, $sequence, $flag, $options = 0)
 	{
 		$client = $imap->getClient();
 
@@ -74,7 +74,7 @@ class Message
 		return false;
 	}
 
-	public static function delete(Connection $imap, int $messageNums, int $flags = 0)
+	public static function delete(\IMAP\Connection $imap, int $messageNums, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -91,12 +91,12 @@ class Message
 		return true;
 	}
 
-	public static function expunge(Connection $imap)
+	public static function expunge(\IMAP\Connection $imap)
 	{
 		return $imap->getClient()->expunge($imap->getMailboxName());
 	}
 
-	public static function fetchBody(Connection $imap, int $messageNum, $section, int $flags = 0)
+	public static function fetchBody(\IMAP\Connection $imap, int $messageNum, $section, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -120,7 +120,7 @@ class Message
 		return $messages[$messageNum]->body;
 	}
 
-	public static function fetchHeader(Connection $imap, int $messageNum, int $flags = 0)
+	public static function fetchHeader(\IMAP\Connection $imap, int $messageNum, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -137,7 +137,7 @@ class Message
 		}
 	}
 
-	public static function fetchMime(Connection $imap, int $messageNum, $section, int $flags = 0)
+	public static function fetchMime(\IMAP\Connection $imap, int $messageNum, $section, int $flags = 0)
 	{
 		if ($messageNum <= 0) {
 			\trigger_error(Errors::badMessageNumber(\debug_backtrace(), 1), E_USER_WARNING);
@@ -167,7 +167,7 @@ class Message
 		return $messages[$messageNum]->body;
 	}
 
-	public static function fetchOverview(Connection $imap, $sequence, int $flags = 0)
+	public static function fetchOverview(\IMAP\Connection $imap, $sequence, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -236,7 +236,7 @@ class Message
 		return $overview;
 	}
 
-	public static function fetchStructure(Connection $imap, int $messageNum, int $flags = 0)
+	public static function fetchStructure(\IMAP\Connection $imap, int $messageNum, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -253,7 +253,7 @@ class Message
 		}
 	}
 
-	public static function fetchUids(Connection $imap, string $sequence, int $flags = 0)
+	public static function fetchUids(\IMAP\Connection $imap, string $sequence, int $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -267,7 +267,7 @@ class Message
 		return $messages;
 	}
 
-	public static function headerInfo(Connection $imap, int $messageNum, int $fromLength = 0, int $subjectLength = 0, $defaultHost = null)
+	public static function headerInfo(\IMAP\Connection $imap, int $messageNum, int $fromLength = 0, int $subjectLength = 0, $defaultHost = null)
 	{
 		$client = $imap->getClient();
 
@@ -290,7 +290,7 @@ class Message
 		}
 	}
 
-	public static function headers(Connection $imap)
+	public static function headers(\IMAP\Connection $imap)
 	{
 		$client = $imap->getClient();
 
@@ -346,7 +346,7 @@ class Message
 	/**
 	 * Convert a string contain a sequence of message id to and equivalent with uid.
 	 */
-	public static function idToUid(Connection $imap, $messageNums) : string
+	public static function idToUid(\IMAP\Connection $imap, $messageNums) : string
 		{
 		$client = $imap->getClient();
 
@@ -365,7 +365,7 @@ class Message
 	/**
 	 * Convert a string contain a sequence of uid(s) to an equivalent with id(s).
 	 */
-	public static function uidToId(Connection $imap, $messageUid) : string
+	public static function uidToId(\IMAP\Connection $imap, $messageUid) : string
 		{
 		$client = $imap->getClient();
 
@@ -381,7 +381,7 @@ class Message
 		return \implode(',', $id);
 		}
 
-	public static function msgno(Connection $imap, $messageUid)
+	public static function msgno(\IMAP\Connection $imap, $messageUid)
 	{
 		$client = $imap->getClient();
 
@@ -390,7 +390,7 @@ class Message
 		return \is_numeric($msgNo) ? (int)$msgNo : $msgNo;
 	}
 
-	public static function saveBody(Connection $imap, $file, $messageNum, $section = '', $flags = 0)
+	public static function saveBody(\IMAP\Connection $imap, $file, $messageNum, $section = '', $flags = 0)
 	{
 		$client = $imap->getClient();
 
@@ -407,7 +407,7 @@ class Message
 	 *
 	 * @return array|false|mixed
 	 */
-	public static function search(Connection $imap, $criteria, int $flags = SE_FREE, string $charset = '')
+	public static function search(\IMAP\Connection $imap, $criteria, int $flags = SE_FREE, string $charset = '')
 	{
 		$client = $imap->getClient();
 
@@ -432,7 +432,7 @@ class Message
 	 *
 	 * @return bool
 	 */
-	public static function setFlagFull(Connection $imap, $sequence, int $flag, $options = 0)
+	public static function setFlagFull(\IMAP\Connection $imap, $sequence, int $flag, $options = 0)
 	{
 		$client = $imap->getClient();
 
@@ -451,7 +451,7 @@ class Message
 		return $client->flag($imap->getMailboxName(), $sequence, \strtoupper(\substr($flag, 1)));
 	}
 
-	public static function sort(Connection $imap, $criteria, $reverse, int $flags = 0, $searchCriteria = null, ?string $charset = null)
+	public static function sort(\IMAP\Connection $imap, $criteria, $reverse, int $flags = 0, $searchCriteria = null, ?string $charset = null)
 	{
 		$client = $imap->getClient();
 
@@ -470,14 +470,14 @@ class Message
 		return $messages;
 	}
 
-	public static function uid(Connection $imap, int $messageNum) : int
+	public static function uid(\IMAP\Connection $imap, int $messageNum) : int
 	{
 		$uid = self::idToUid($imap, $messageNum);
 
 		return \is_numeric($uid) ? (int)$uid : $uid;
 	}
 
-	public static function undelete(Connection $imap, $messageNums, $flags = 0)
+	public static function undelete(\IMAP\Connection $imap, $messageNums, $flags = 0)
 	{
 		$client = $imap->getClient();
 

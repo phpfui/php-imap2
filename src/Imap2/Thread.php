@@ -13,7 +13,7 @@ namespace PHPFUI\Imap2;
 
 class Thread
 	{
-	public static function thread(Connection $imap, int $flags = SE_FREE)
+	public static function thread(\IMAP\Connection $imap, int $flags = SE_FREE)
 		{
 		$client = $imap->getClient();
 
