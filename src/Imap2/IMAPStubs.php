@@ -115,7 +115,7 @@ if (! \defined('SO_FREE')) {
 }
 
 if (! \defined('SO_NOSERVER')) {
-	\define('SO_NOSERVER', 16);
+	\define('SO_NOSERVER', 8);
 }
 
 if (! \defined('SA_MESSAGES')) {
@@ -285,7 +285,6 @@ if (! \defined('IMAP_GC_ENV')) {
 if (! \defined('IMAP_GC_TEXTS')) {
 	\define('IMAP_GC_TEXTS', 4);
 }
-
 
 if (! \function_exists('imap_8bit'))
   {
@@ -691,7 +690,7 @@ if (! \function_exists('imap_qprint'))
   {
   function imap_qprint(string $string) : string
 		{
-		return $string;
+		return \quoted_printable_decode($string);
 		}
   }
 
@@ -923,7 +922,7 @@ if (! \function_exists('imap_utf8'))
 	{
   function imap_utf8(string $string) : string
 		{
-		return $string;
+		return \iconv_mime_decode($string, 0, 'UTF-8');
 		}
 	}
 

@@ -54,17 +54,18 @@ class Functions
 		}
 
 	public static function getHostFromMailbox(string|array $mailbox) : string
-	{
+		{
 		$mailboxParts = \is_array($mailbox) ? $mailbox : self::parseMailboxString($mailbox);
 
-		return @$mailboxParts['host'];
-	}
+		return $mailboxParts['host'] ?? '';
+		}
 
 	public static function getListAttributesValue(array $attributes) : int
-	{
+		{
 		$attributesValue = 0;
 
-		foreach ($attributes as $attribute) {
+		foreach ($attributes as $attribute)
+			{
 			switch ($attribute) {
 				case '\\NoInferiors':
 					$attributesValue |= LATT_NOINFERIORS;
@@ -100,62 +101,58 @@ class Functions
 					$attributesValue |= LATT_HASNOCHILDREN;
 
 					break;
+				}
 			}
-		}
 
 		return $attributesValue;
-	}
+		}
 
 	/**
 	 * Get name from full mailbox string.
 	 */
 	public static function getMailboxName(string $mailbox) : string
-	{
+		{
 		$mailboxParts = \explode('}', $mailbox, 2);
 
 		return empty($mailboxParts[1]) ? 'INBOX' : $mailboxParts[1];
-	}
-
-	public static function getSslModeFromMailbox(array|string $mailbox) : string | bool
-	{
-		$mailboxParts = \is_array($mailbox) ? $mailbox : self::parseMailboxString($mailbox);
-
-		if (\in_array('ssl', $mailboxParts['path'])) {
-			return 'ssl';
 		}
 
-		return false;
-	}
+	public static function getSslModeFromMailbox(array|string $mailbox) : string | bool
+		{
+		$mailboxParts = \is_array($mailbox) ? $mailbox : self::parseMailboxString($mailbox);
 
-	public static function isBackportCall(array $backtrace, int $depth) : bool
-	{
-		return isset($backtrace[$depth + 1]['function'])
-			&& \preg_match('/^imap_/', $backtrace[$depth + 1]['function'])
-			&& \preg_match('/^imap2_/', $backtrace[$depth]['function'])
-			&& \substr($backtrace[$depth + 1]['function'], 4) == \substr($backtrace[$depth]['function'], 5);
-	}
+		if (\in_array('ssl', $mailboxParts['path']))
+			{
+			return 'ssl';
+			}
+
+		return false;
+		}
 
 	public static function keyBy(string $name, array $list) : array
-	{
+		{
 		$keyBy = [];
 
-		foreach ($list as $item) {
-			if (! isset($item->{$name})) {
+		foreach ($list as $item)
+			{
+			if (! isset($item->{$name}))
+				{
 				\trigger_error('keyBy: key "' . $name . '" not found!', E_USER_WARNING);
 
 				continue;
-			}
+				}
 
-			if (isset($keyBy[$item->{$name}])) {
+			if (isset($keyBy[$item->{$name}]))
+				{
 				\trigger_error('keyBy: duplicate key "' . $name . '" = "' . $item->{$name} . '"', E_USER_WARNING);
 
 				continue;
-			}
+				}
 			$keyBy[$item->{$name}] = $item;
-		}
+			}
 
 		return $keyBy;
-	}
+		}
 
 	public static function parseMailboxString(string $mailbox) : array
 	{
@@ -169,6 +166,20 @@ class Functions
 
 		return $values;
 	}
+
+	public static function sanitizeAddress(string $address, string $defaultHost = 'UNKNOWN') : string
+		{
+		$addressList = \imap_rfc822_parse_adrlist($address, $defaultHost);
+
+		$sanitizedAddress = [];
+
+		foreach ($addressList as $addressEntry)
+			{
+			$sanitizedAddress[] = \imap_rfc822_write_address($addressEntry->mailbox, $addressEntry->host, $addressEntry->personal);
+			}
+
+		return \implode(', ', $sanitizedAddress);
+		}
 
 	public static function writeAddressFromEnvelope(array $addressList) : string
 	{

@@ -37,7 +37,7 @@ class Errors
 
   public static function appendErrorCanNotOpen(string $mailbox, string $error) : void
 		{
-		if ('{' == $mailbox[0])
+		if (\strlen($mailbox) && '{' == $mailbox[0])
 			{
 			$error = \preg_replace("/^AUTHENTICATE [A-Z]+\d*:\s/i", '', $error);
 			//$error = preg_replace("/^([A-Z]+\d+ )(OK|NO|BAD|BYE|PREAUTH)?\s/i", '', $error);
@@ -53,11 +53,6 @@ class Errors
 
   public static function badMessageNumber(array $backtrace, int $depth) : string
 		{
-		if (Functions::isBackportCall($backtrace, $depth))
-			{
-			$depth++;
-			}
-
 		return $backtrace[$depth]['function'] . '(): Bad message number in '
 				 . $backtrace[$depth]['file'] . ' on line ' . $backtrace[$depth]['line'] . '. Source code';
 		}

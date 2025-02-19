@@ -10,13 +10,13 @@ include 'vendor/phpfui/php-imap2/src/Imap2/IMAPStubs.php
 //$mbh = \imap_open($server, $username, $token, OP_XOAUTH2);
 ```
 
-## This package is based on javanile/php-imap2
+## This package is based on arbor-education/php-imap2 and jaavanile/php-imap2
 
-It was updated with arbor-education/php-imap2, as that seems to be the most maintained fork, as jaavanile/php-imap2 seems abandon. Since this a just a wrapper around the imap_ functions, it can easily be updated to a better IMAP library if needed.
+It has been updated to modern PHP 8 standards and simplified. Since this a just a wrapper around the imap_ functions, it can easily be updated to a better IMAP library if needed.
 
 ## Unimplemented functions
 
-The following functions were not implemented in the original source:
+The following functions were not implemented in the original source and will be undefined:
 
 * function imap_mail(string $to, string $subject, string $message, ?string $additional_headers = null, ?string $cc = null, ?string $bcc = null, ?string $return_path = null) : bool
 * function imap_mail_compose(array $envelope, array $bodies) : string|false
@@ -25,9 +25,7 @@ The following functions were not implemented in the original source:
 
 The following functions have no effect:
 
-* function imap_8bit(string $string) : string
 * function imap_mutf7_to_utf8(string $string) : string
-* function imap_qprint(string $string) : string
 
 ## Testing
 
@@ -37,9 +35,9 @@ Anyone interested in contributing tests should look into updating the original t
 
 The following functions seem to work on live sites:
 
-* imap_open()
 * imap_close()
-* imap_num_msg()
 * imap_delete()
 * imap_errors()
+* imap_num_msg()
+* imap_open()
 * imap_savebody()

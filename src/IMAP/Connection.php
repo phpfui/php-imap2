@@ -104,6 +104,11 @@ class Connection
 	 */
 	public static function open(string $mailbox, string $user, string $password, int $flags = 0, int $retries = 0, array $options = []) : Connection | false
 		{
+		if (! ($flags & 4095) && ! ($flags & CL_EXPUNGE))
+			{
+			throw new \ValueError('imap_open(): Argument #4 ($flags) must be a bitmask of the OP_* constants, and CL_EXPUNGE');
+			}
+
 		$connection = new Connection($mailbox, $user, $password, $flags, $retries, $options);
 
 		$success = $connection->connect();
@@ -127,7 +132,7 @@ class Connection
 		$mailboxParts = Functions::parseMailboxString($mailbox);
 
 		$this->host = Functions::getHostFromMailbox($mailboxParts);
-		$this->port = @$mailboxParts['port'];
+		$this->port = $mailboxParts['port'] ?? 0;
 		$this->sslMode = Functions::getSslModeFromMailbox($mailboxParts);
 		$this->currentMailbox = $mailboxParts['mailbox'];
 		}
@@ -148,7 +153,7 @@ class Connection
 
 		if (empty($success))
 			{
-			\trigger_error('imap2_reopen(): Couldn\'t re-open stream', E_USER_WARNING);
+			\trigger_error('imap_reopen(): Couldn\'t re-open stream', E_USER_WARNING);
 
 			return false;
 			}
