@@ -46,11 +46,6 @@ class Functions
 				{
 				$addressObject->personal = $personal;
 				}
-			else
-				{
-				$addressObject->personal = '';
-				}
-			$addressObject->adl = '';
 
 			$addressObjectList[] = $addressObject;
 			}
