@@ -591,21 +591,21 @@ if (! \function_exists('imap_lsub'))
 		}
   }
 
-if (! \function_exists('imap_mail'))
-  {
-  function imap_mail(string $to, string $subject, string $message, ?string $additional_headers = null, ?string $cc = null, ?string $bcc = null, ?string $return_path = null) : bool
-		{
-		throw new \Exception('imap_mail is not implemented');
-		}
-  }
-
-if (! \function_exists('imap_mail_compose'))
-  {
-  function imap_mail_compose(array $envelope, array $bodies) : string|false
-		{
-		throw new \Exception('imap_mail_compose is not implemented');
-		}
-  }
+//if (! \function_exists('imap_mail'))
+//  {
+//  function imap_mail(string $to, string $subject, string $message, ?string $additional_headers = null, ?string $cc = null, ?string $bcc = null, ?string $return_path = null) : bool
+//		{
+//		throw new \Exception('imap_mail is not implemented');
+//		}
+//  }
+//
+//if (! \function_exists('imap_mail_compose'))
+//  {
+//  function imap_mail_compose(array $envelope, array $bodies) : string|false
+//		{
+//		throw new \Exception('imap_mail_compose is not implemented');
+//		}
+//  }
 
 if (! \function_exists('imap_mail_copy'))
   {
@@ -631,13 +631,13 @@ if (! \function_exists('imap_mailboxmsginfo'))
 		}
   }
 
-if (! \function_exists('imap_mime_header_decode'))
-  {
-  function imap_mime_header_decode(string $string) : array
-		{
-		throw new \Exception(__FUNCTION__ . ' is not implemented.');
-		}
-  }
+//if (! \function_exists('imap_mime_header_decode'))
+//  {
+//  function imap_mime_header_decode(string $string) : array
+//		{
+//		throw new \Exception(__FUNCTION__ . ' is not implemented.');
+//		}
+//  }
 
 if (! \function_exists('imap_msgno'))
   {
@@ -814,13 +814,13 @@ if (! \function_exists('imap_search'))
 		}
   }
 
-if (! \function_exists('imap_set_quota'))
-  {
-  function imap_set_quota(\IMAP\Connection $imap, string $quota_root) : array|false
-		{
-		throw new \Exception(__FUNCTION__ . ' is not implemented.');
-		}
-  }
+//if (! \function_exists('imap_set_quota'))
+//  {
+//  function imap_set_quota(\IMAP\Connection $imap, string $quota_root) : array|false
+//		{
+//		throw new \Exception(__FUNCTION__ . ' is not implemented.');
+//		}
+//  }
 
 if (! \function_exists('imap_setacl'))
   {

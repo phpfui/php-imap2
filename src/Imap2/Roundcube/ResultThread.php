@@ -35,13 +35,11 @@ class ResultThread
 
 	public const SEPARATOR_LEVEL = ':';
 
-	public $incomplete = false;
-
 	protected array $meta = [];
 
 	protected string $order = 'ASC';
 
-	protected $raw_data;
+	protected string $raw_data = '';
 
 	/**
 	 * Object constructor.
@@ -79,7 +77,7 @@ class ResultThread
 	 *
 	 * @return int Number of elements
 	 */
-	public function count_messages()
+	public function count_messages() : int
 	{
 		if (null !== $this->meta['messages'])
 			return $this->meta['messages'];
@@ -143,7 +141,7 @@ class ResultThread
 	 *
 	 * @return array List of message identifiers
 	 */
-	public function get()
+	public function get() : array
 	{
 		if (empty($this->raw_data)) {
 			return [];
@@ -163,13 +161,13 @@ class ResultThread
 	 *
 	 * @return array|string Response parameters or parameter value
 	 */
-	public function get_parameters($param = null)
+	public function get_parameters(?string $param = null)
 	{
 		$params = [];
 		$params['MAILBOX'] = $this->mailbox;
 		$params['ORDER'] = $this->order;
 
-		if (null !== $param) {
+		if ($param) {
 			return $params[$param];
 		}
 
@@ -241,9 +239,9 @@ class ResultThread
 	 *
 	 * @return bool True if the result is an error, False otherwise
 	 */
-	public function is_error()
+	public function is_error() : bool
 	{
-		return null === $this->raw_data;
+		return '' === $this->raw_data;
 	}
 
 	/**

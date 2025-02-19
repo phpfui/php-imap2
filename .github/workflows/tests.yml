@@ -10,31 +10,9 @@ jobs:
       matrix:
         php: [8.4, 8.3, 8.2, 8.1]
         dependency-version: [prefer-stable]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
 
     name: ${{ matrix.os }} - PHP${{ matrix.php }} - ${{ matrix.dependency-version }}
-
-    services:
-      mailserver:
-        image: bytemark/postfix-dovecot # Or other suitable mail server image
-        ports:
-          - 110:110 # POP3 (if needed)
-          - 143:143 # IMAP
-          - 25:25   # SMTP (for sending test emails)
-        environment:
-          - POSTFIX_MYHOSTNAME=localhost # Important: Set hostname
-          - POSTFIX_MYDESTINATION=localhost
-          - POSTFIX_SMTP_RELAYHOST=
-          - DOVECOT_USER=testuser # Set username
-          - DOVECOT_PASSWORD=testpassword # Set password
-          - DOVECOT_MAIL_LOCATION=maildir:/var/mail/vmail/%d/%n # Mail storage format
-        options: >-
-          --health-cmd "nc -zv 127.0.0.1 143"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        volumes:
-          - mail_data:/var/mail/vmail  # Persist mail data between runs (optional but recommended)
 
     steps:
       - name: Checkout code
