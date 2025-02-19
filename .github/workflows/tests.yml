@@ -60,6 +60,3 @@ jobs:
       - name: Execute tests
         run: vendor/bin/phpunit
 
-volumes:
-  mail_data: # Named volume for mail data persistence
-
