@@ -12,20 +12,22 @@
 namespace PHPFUI\Imap2;
 
 class Functions
-{
-	public static function expectedNumberOfMessages(string $sequence) : int
 	{
-		if (\strpos($sequence, ',') > 0) {
+	public static function expectedNumberOfMessages(string $sequence) : int
+		{
+		if (\strpos($sequence, ',') > 0)
+			{
 			return \count(\explode(',', $sequence));
-		} elseif (\strpos($sequence, ':') > 0) {
+			}
+		elseif (\strpos($sequence, ':') > 0)
+			{
 			$range = \explode(':', $sequence);
 
 			return (int)$range[1] - (int)$range[0];
+			}
+
+		return 1;
 		}
-
-			return 1;
-
-	}
 
 	public static function getAddressObjectList(array $addressList, string $defaultHost = 'UNKNOWN') : array
 		{
@@ -155,7 +157,7 @@ class Functions
 		}
 
 	public static function parseMailboxString(string $mailbox) : array
-	{
+		{
 		$mailboxParts = \explode('}', $mailbox);
 		$mailboxParts[0] = \substr($mailboxParts[0], 1);
 
@@ -165,7 +167,7 @@ class Functions
 		$values['path'] = \explode('/', $values['path']);
 
 		return $values;
-	}
+		}
 
 	public static function sanitizeAddress(string $address, string $defaultHost = 'UNKNOWN') : string
 		{
@@ -182,22 +184,25 @@ class Functions
 		}
 
 	public static function writeAddressFromEnvelope(array $addressList) : string
-	{
-		if (empty($addressList)) {
+		{
+		if (empty($addressList))
+			{
 			return '';
-		}
+			}
 
 		$sanitizedAddress = [];
 
-		foreach ($addressList as $addressEntry) {
+		foreach ($addressList as $addressEntry)
+			{
 			$parsedAddressEntry = \imap_rfc822_write_address($addressEntry[2], $addressEntry[3], $addressEntry[0]);
 
-			if ('@""' == \substr($parsedAddressEntry, -3)) {
+			if ('@""' == \substr($parsedAddressEntry, -3))
+				{
 				$parsedAddressEntry = \substr($parsedAddressEntry, 0, \strlen($parsedAddressEntry) - 3) . ': ';
-			}
+				}
 			$sanitizedAddress[] = $parsedAddressEntry;
-		}
+			}
 
 		return \implode(', ', $sanitizedAddress);
+		}
 	}
-}

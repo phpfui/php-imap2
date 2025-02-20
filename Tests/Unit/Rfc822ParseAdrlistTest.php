@@ -6,8 +6,8 @@ class Rfc822ParseAdrlistTest extends \PHPUnit\Framework\TestCase
 	{
 	public function test_rfc822_parse_adrlist() : void
 		{
-		$address_string = "Joe Doe <doe@example.com>, postmaster@example.com, root";
-		$address_array  = imap_rfc822_parse_adrlist($address_string, "example.com");
+		$address_string = 'Joe Doe <doe@example.com>, postmaster@example.com, root';
+		$address_array = \imap_rfc822_parse_adrlist($address_string, 'example.com');
 
 		$this->assertIsArray($address_array);
 
