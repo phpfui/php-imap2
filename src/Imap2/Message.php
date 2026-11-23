@@ -223,8 +223,9 @@ class Message
 			{
 			$messageEntry = (object)[
 				'subject' => $message->envelope[1],
-				'from' => \PHPFUI\Imap2\Functions::writeAddressFromEnvelope($message->envelope[2]),
-				'to' => $message->get('to'),
+				// like ext-imap, only the first address; NIL (no header) arrives as null
+				'from' => \PHPFUI\Imap2\Functions::writeAddressFromEnvelope(\array_slice((array)($message->envelope[2] ?? []), 0, 1)),
+				'to' => \PHPFUI\Imap2\Functions::writeAddressFromEnvelope(\array_slice((array)($message->envelope[5] ?? []), 0, 1)),
 				'date' => $message->envelope[0],
 				'message_id' => $message->envelope[9],
 				'references' => $message->references,
